@@ -349,6 +349,14 @@ where
         Ok(channel * spacing + base)
     }
 
+    /// Read the rssi
+    pub fn rssi(&mut self) -> Result<u8, Error<E>> {
+        let regs = self.read_rds()?;
+        let status = regs[Register::STATUSRSSI];
+        let lower_byte: u8 = (status & 0xFF) as u8;
+        Ok(lower_byte)
+    }
+
     /// Get the device ID
     ///
     /// Returns the (part number, manufacturer ID) as a tuple
