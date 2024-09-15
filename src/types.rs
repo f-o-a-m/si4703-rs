@@ -1,4 +1,4 @@
-use core::marker::PhantomData;
+use core::{fmt, marker::PhantomData};
 
 /// Errors in this crate
 #[derive(Debug)]
@@ -9,6 +9,16 @@ pub enum Error<E> {
     InvalidInputData,
     /// Seek operation failed / Band limit reached
     SeekFailed,
+}
+
+impl<E: fmt::Display> fmt::Display for Error<E> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Error::I2C(e) => write!(f, "I2C bus communication error: {}", e),
+            Error::InvalidInputData => write!(f, "Invalid input data provided"),
+            Error::SeekFailed => write!(f, "Seek operation failed or band limit reached"),
+        }
+    }
 }
 
 /// Errors for operations involving I2C communication as well
